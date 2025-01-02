@@ -4,6 +4,7 @@
 cluster-create:
 	k3d cluster create --config k3d-lmops.yaml
 	$(MAKE) install-ingress
+	$(MAKE) install-zenml
 
 # Delete the k3d cluster
 cluster-delete:
@@ -20,18 +21,18 @@ cluster-stop:
 
 # Install ingress-nginx controller
 install-ingress:
-	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+	helm repo add nginx-stable https://helm.nginx.com/stable || true
 	helm repo update
-	helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
-		--namespace ingress-nginx --create-namespace \
-		--set controller.publishService.enabled=true \
-		--set controller.service.type=LoadBalancer
+	helm install nginx-ingress nginx-stable/nginx-ingress \
+    --namespace ingress-nginx --create-namespace \
+    --set rbac.create=true \
+    --set controller.service.type=LoadBalancer \
+    --set controller.service.loadBalancerIP=172.18.0.240 
 
 # --= zenml =--
 # Install or upgrade ZenML server
 install-zenml:
-	helm uninstall zenml-server || true
-	helm install zenml-server ./zenml --values zenml.yml
+	helm upgrade --install zenml-server ./zenml --values zenml.yml
 
 
 # --= status =--
