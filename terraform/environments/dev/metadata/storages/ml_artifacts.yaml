@@ -1,0 +1,6 @@
+"admin_sa": "storage-admin-sa@slmops-dev.iam.gserviceaccount.com"
+"location": "EUROPE-NORTH1"
+"name": "slmops-dev-ml-artifacts"
+"project": "slmops-dev"
+"url": "gs://slmops-dev-ml-artifacts"
+"user_sa": "storage-user-sa@slmops-dev.iam.gserviceaccount.com"
