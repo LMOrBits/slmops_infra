@@ -15,15 +15,47 @@ build/
 .coverage
 htmlcov/
 
-# Terraform
-.terraform/
+# Terraform files
+**/.terraform/*
 *.tfstate
 *.tfstate.*
 *.tfvars
+!terraform/environments/dev/terraform.tfvars
+!terraform/init/terraform.tfvars
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform CLI configuration files
 .terraformrc
 terraform.rc
+
+# Terraform lock files
 .terraform.lock.hcl
-crash.log
+
+# Local development
+.env
+.envrc
+*.log
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db 
 
 # Credentials and Secrets
 *.key
@@ -50,3 +82,4 @@ log/
 # Local development
 .local/
 .history/ 
+
