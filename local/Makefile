@@ -35,6 +35,10 @@ install-ingress:
 install-zenml:
 	helm upgrade --install zenml-server ./manifests/zenml --values ./manifests/zenml.yml
 
+# --= mlflow =--
+# Install or upgrade MLflow server
+install-mlflow:
+	helm upgrade --install mlflow-server ./manifests/mlflow --values ./manifests/mlflow.yml
 
 # --= status =--
 
@@ -63,6 +67,15 @@ debug-ingress:
 	@echo "\nIngress Controller Events:"
 	kubectl get events -n ingress-nginx
 
+# Check MLflow status
+check-mlflow:
+	@echo "\nMLflow Pods:"
+	kubectl get pods | grep mlflow
+	@echo "\nMLflow Services:"
+	kubectl get svc | grep mlflow
+	@echo "\nMLflow Ingress:"
+	kubectl get ingress | grep mlflow
+
 # Check cluster status
 cluster-status:
 	k3d cluster list
@@ -70,3 +83,9 @@ cluster-status:
 	kubectl get nodes
 	@echo "\nKubernetes Pods:"
 	kubectl get pods -A
+	@echo "\nMLflow Status:"
+	$(MAKE) check-mlflow
+	@echo "\nZenML Status:"
+	$(MAKE) check-zenml
+	@echo "\nIngress Status:"
+	$(MAKE) check-ingress

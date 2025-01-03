@@ -1,0 +1,10 @@
+tracking:
+  auth:
+    enabled: true
+    username: admin
+    password: "slmops"
+  ingress:
+    enabled: true
+    hostname: mlflow.localhost
+    ingressClassName: nginx
+
