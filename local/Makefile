@@ -14,11 +14,12 @@ cluster-delete:
 cluster-start:
 	k3d cluster start slmops-cluster
 
+
 # Stop the cluster
 cluster-stop:
 	k3d cluster stop slmops-cluster
 
-
+# --= ingress =--
 # Install ingress-nginx controller
 install-ingress:
 	helm repo add nginx-stable https://helm.nginx.com/stable || true
@@ -27,12 +28,12 @@ install-ingress:
     --namespace ingress-nginx --create-namespace \
     --set rbac.create=true \
     --set controller.service.type=LoadBalancer \
-    --set controller.service.loadBalancerIP=172.18.0.240 
+    --set controller.service.loadBalancerIP=172.18.0.240
 
 # --= zenml =--
 # Install or upgrade ZenML server
 install-zenml:
-	helm upgrade --install zenml-server ./zenml --values zenml.yml
+	helm upgrade --install zenml-server ./manifests/zenml --values ./manifests/zenml.yml
 
 
 # --= status =--
