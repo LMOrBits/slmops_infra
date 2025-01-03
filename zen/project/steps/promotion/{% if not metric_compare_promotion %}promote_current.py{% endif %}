@@ -1,0 +1,30 @@
+# {% include 'template/license_header' %}
+
+
+from zenml import get_step_context, step
+from zenml.client import Client
+from zenml.logger import get_logger
+from zenml.model_registries.base_model_registry import ModelVersionStage
+
+logger = get_logger(__name__)
+
+model_registry = Client().active_stack.model_registry
+
+
+@step
+def promote_current():
+    """Promote current trained model.
+
+    This is an example of a model promotion step, which promotes the
+    current trained model to the version.
+    """
+
+    ### ADD YOUR OWN CODE HERE - THIS IS JUST AN EXAMPLE ###
+    pipeline_extra = get_step_context().pipeline_run.config.extra
+    logger.info(f"Promoting current model version")
+    model = get_step_context().model
+    model.set_stage(pipeline_extra["target_env"], force=True)
+    logger.info(
+        f"Current model version promoted to {pipeline_extra['target_env']}"
+    )
+    ### YOUR CODE ENDS HERE ###
