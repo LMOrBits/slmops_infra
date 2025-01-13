@@ -83,3 +83,5 @@ log/
 .local/
 .history/ 
 
+cloud/terraform/environments/dev/keys/*
+
