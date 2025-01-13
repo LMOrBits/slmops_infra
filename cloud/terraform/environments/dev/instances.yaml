@@ -1,0 +1,29 @@
+master:
+  machine_type: n1-standard-2
+  zone: europe-north1-a
+  image: debian-cloud/debian-11
+  ssh_user: debian
+  ssh_key_file: id_rsa.pub
+  tags:
+    - web
+    - production
+
+# agent-1:
+#   machine_type: n1-standard-1
+#   zone: europe-north1-a
+#   image: debian-cloud/debian-11
+#   ssh_user: debian
+#   ssh_key_file: id_rsa.pub
+#   tags:
+#     - db
+#     - production 
+
+# agent-2:
+#   machine_type: e2-medium
+#   zone: europe-north1-a
+#   image: debian-cloud/debian-11
+#   ssh_user: debian
+#   ssh_key_file: id_rsa.pub
+#   tags:
+#     - db
+#     - production 

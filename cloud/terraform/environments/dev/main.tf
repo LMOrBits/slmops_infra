@@ -51,3 +51,21 @@ module "iam" {
   data_instructed_bucket_name   = module.storage.data_instructed_bucket.name
   data_uninstructed_bucket_name = module.storage.data_uninstructed_bucket.name
 }
+
+module "vpc" {
+  source = "../../modules/vpc"
+
+  vpc_name    = var.vpc_name
+  subnet_name = var.subnet_name
+  subnet_cidr = var.subnet_cidr
+  region      = var.region
+  project_id = var.project_id
+}
+module "compute" {
+  
+  source = "../../modules/compute"
+
+  subnet_id        = module.vpc.subnet_id
+  instances_config = var.instances_config
+  project_id       = var.project_id
+}

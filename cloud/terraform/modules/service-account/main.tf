@@ -11,7 +11,7 @@ resource "google_project_iam_member" "ml_pipeline_sa_roles" {
     "roles/artifactregistry.reader",
     "roles/cloudbuild.builds.builder"
   ])
-  
+
   project = var.project_id
   role    = each.key
   member  = "serviceAccount:${google_service_account.ml_pipeline_sa.email}"

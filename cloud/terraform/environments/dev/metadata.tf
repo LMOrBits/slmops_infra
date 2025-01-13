@@ -1,4 +1,3 @@
-
 resource "local_file" "admin_key" {
   content  = base64decode(module.iam.storage_admin_key)
   filename = "./keys/storage-admin-key.json"
@@ -15,9 +14,35 @@ resource "local_file" "metadata_directory" {
   content  = ""
 
   provisioner "local-exec" {
-    command = "mkdir -p metadata/storages"
+    command = "mkdir -p metadata/storages metadata/compute"
   }
 }
+
+# Create directory for SSH keys if it doesn't exist
+resource "null_resource" "ssh_key_directory" {
+  provisioner "local-exec" {
+    command = "mkdir -p keys"
+  }
+}
+
+# # Generate SSH key pair if it doesn't exist
+# resource "null_resource" "generate_ssh_key" {
+#   provisioner "local-exec" {
+#     command = <<-EOT
+#       if [ ! -f keys/instance_ssh ]; then
+#         ssh-keygen -t rsa -b 4096 -f keys/instance_ssh -N ''
+#       fi
+#     EOT
+#   }
+
+#   depends_on = [null_resource.ssh_key_directory]
+# }
+
+# # Read the generated public key
+# data "local_file" "ssh_public_key" {
+#   filename   = "keys/instance_ssh.pub"
+#   depends_on = [null_resource.generate_ssh_key]
+# }
 
 # Create storage metadata file
 resource "local_file" "storage_metadata" {
@@ -94,3 +119,5 @@ resource "local_file" "data_uninstructed_yaml" {
 
   depends_on = [local_file.metadata_directory]
 }
+
+

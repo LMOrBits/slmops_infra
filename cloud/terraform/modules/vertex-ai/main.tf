@@ -12,4 +12,4 @@ resource "google_vertex_ai_metadata_store" "store" {
   description = "Vertex AI Metadata Store for ${var.env} environment"
   region      = var.region
   project     = var.project_id
-} 
+}

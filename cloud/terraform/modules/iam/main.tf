@@ -1,3 +1,32 @@
+# Create super admin service account
+resource "google_service_account" "super_admin" {
+  account_id   = "super-admin-sa"
+  display_name = "Super Admin Service Account"
+  project      = var.project_id
+}
+
+# Grant project-wide admin roles
+resource "google_project_iam_member" "super_admin_roles" {
+  for_each = toset([
+    "roles/editor",                  # Broad edit access across project
+    "roles/compute.admin",           # Full control of compute resources
+    "roles/storage.admin",           # Full control of storage
+    "roles/iam.serviceAccountAdmin", # Can manage service accounts
+    "roles/cloudfunctions.admin",    # Full control of Cloud Functions
+    "roles/cloudscheduler.admin",    # Full control of Cloud Scheduler
+    "roles/logging.admin",           # Full control of logging
+    "roles/monitoring.admin"         # Full control of monitoring
+  ])
+
+  project = var.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.super_admin.email}"
+}
+
+# Generate key for super admin
+resource "google_service_account_key" "super_admin_key" {
+  service_account_id = google_service_account.super_admin.name
+}
 # Create service accounts
 resource "google_service_account" "storage_admin" {
   account_id   = "storage-admin-sa"
