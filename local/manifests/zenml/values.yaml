@@ -55,7 +55,7 @@ zenml:
   auth:
 
     # The ZenML authentication scheme. Use one of:
-    # 
+    #
     # NO_AUTH - No authentication
     # HTTP_BASIC - HTTP Basic authentication
     # OAUTH2_PASSWORD_BEARER - OAuth2 password bearer
@@ -69,7 +69,7 @@ zenml:
     #   from secrets import token_hex
     #   token_hex(32)
     #   ```
-    #   
+    #
     # or:
     #
     #   ```shell
@@ -81,7 +81,7 @@ zenml:
     jwtSecretKey:
 
     # The JWT token algorithm to use. Use one of:
-    # 
+    #
     # HS256 - HMAC using SHA-256 hash algorithm
     # HS384 - HMAC using SHA-384 hash algorithm
     # HS512 - HMAC using SHA-512 hash algorithm
@@ -95,14 +95,14 @@ zenml:
     # The audience of the JWT tokens. If not specified, the audience is set to
     # the ZenML Server ID.
     jwtTokenAudience:
-    
+
     # The leeway in seconds allowed when verifying the expiration time of JWT
     # tokens.
     jwtTokenLeewaySeconds: 10
 
     # The expiration time of JWT tokens in minutes. If not specified, generated
     # JWT tokens will not be set to expire.
-    jwtTokenExpireMinutes: 
+    jwtTokenExpireMinutes:
 
     # The name of the http-only cookie used to store the JWT tokens used to
     # authenticate web clients. If not specified, the cookie name is set to a
@@ -191,7 +191,7 @@ zenml:
   rootUrlPath:
 
   defaultProject: default
-  
+
   # Implicit authentication methods featured by service connectors that support
   # them are disabled by default, for security reasons. This is because they
   # allow users to authenticate to the cloud provider where ZenML is running
@@ -252,8 +252,8 @@ zenml:
     #            database URL must have permissions to manage (create, drop, and
     #            modify) the backup database in addition to the main
     #            database.
-    backupStrategy: in-memory
-    # backupPVStorageClass: standard
+    # backupStrategy: in-memory
+    backupPVStorageClass: standard
     # backupPVStorageSize: 1Gi
     # backupDatabase: "zenml_backup"
 
@@ -292,7 +292,7 @@ zenml:
       #   from secrets import token_hex
       #   token_hex(32)
       #   ```
-      #   
+      #
       # or:
       #
       #   ```shell
@@ -319,11 +319,11 @@ zenml:
     # the AWS Service Connector. Just set the `authMethod` field to the
     # authentication method that you want to use and set the required
     # configuration attributes under the `authConfig` field.
-    # 
+    #
     # For a list of supported authentication methods and their configuration
     # options, see the following documentation:
     # https://docs.zenml.io/how-to/auth-management/aws-service-connector#authentication-methods
-    # 
+    #
     # You can also use the ZenML CLI to get the list of supported authentication
     # methods and their configuration options, e.g.:
     #
@@ -364,7 +364,7 @@ zenml:
         # instance. Required if the `authMethod` is set to `iam-role`. Optional
         # if the `authMethod` is set to `implicit`.
         role_arn:
-        
+
       # The AWS region to use. This must be set to the region where the AWS
       # Secrets Manager service that you want to use is located.
       #
@@ -392,11 +392,11 @@ zenml:
     # the GCP Service Connector. Just set the `authMethod` field to the
     # authentication method that you want to use and set the required
     # configuration attributes under the `authConfig` field.
-    # 
+    #
     # For a list of supported authentication methods and their configuration
     # options, see the following documentation:
     # https://docs.zenml.io/how-to/auth-management/gcp-service-connector#authentication-methods
-    # 
+    #
     # You can also use the ZenML CLI to get the list of supported authentication
     # methods and their configuration options, e.g.:
     #
@@ -434,7 +434,7 @@ zenml:
         # The GCP service account credentials to use to authenticate with the
         # GCP Secrets Manager instance. Required if the `authMethod` is set to
         # `service-account` or `impersonation`.
-        service_account_json: 
+        service_account_json:
 
         # The GCP service account to impersonate when authenticating with the
         # GCP Secrets Manager instance. Required if the `authMethod` is set to
@@ -447,9 +447,9 @@ zenml:
       # NOTE: deprecated; use `authConfig.project_id` instead.
       project_id:
 
-      # The JSON content of the GCP credentials file to use to authenticate with 
-      # the GCP Secrets Manager instance. You can omit this if you are running 
-      # the ZenML server in a GCP GKE cluster that uses workload identity to 
+      # The JSON content of the GCP credentials file to use to authenticate with
+      # the GCP Secrets Manager instance. You can omit this if you are running
+      # the ZenML server in a GCP GKE cluster that uses workload identity to
       # authenticate with GCP services without the need for credentials.
       #
       # NOTE: deprecated; use `authConfig.service_account_json` instead.
@@ -464,11 +464,11 @@ zenml:
     # the Azure Service Connector. Just set the `authMethod` field to the
     # authentication method that you want to use and set the required
     # configuration attributes under the `authConfig` field.
-    # 
+    #
     # For a list of supported authentication methods and their configuration
     # options, see the following documentation:
     # https://docs.zenml.io/how-to/auth-management/azure-service-connector#authentication-methods
-    # 
+    #
     # You can also use the ZenML CLI to get the list of supported authentication
     # methods and their configuration options, e.g.:
     #
@@ -589,7 +589,7 @@ zenml:
       #   from secrets import token_hex
       #   token_hex(32)
       #   ```
-      #   
+      #
       # or:
       #
       #   ```shell
@@ -616,11 +616,11 @@ zenml:
     # the AWS Service Connector. Just set the `authMethod` field to the
     # authentication method that you want to use and set the required
     # configuration attributes under the `authConfig` field.
-    # 
+    #
     # For a list of supported authentication methods and their configuration
     # options, see the following documentation:
     # https://docs.zenml.io/how-to/auth-management/aws-service-connector#authentication-methods
-    # 
+    #
     # You can also use the ZenML CLI to get the list of supported authentication
     # methods and their configuration options, e.g.:
     #
@@ -660,7 +660,7 @@ zenml:
         # The AWS role ARN to use to authenticate with the AWS Secrets Manager
         # instance. Required if the `authMethod` is set to `iam-role`.
         role_arn:
-        
+
     # GCP backup secrets store configuration. Only relevant if the `gcp` backup
     # secrets store type is configured.
     #
@@ -670,11 +670,11 @@ zenml:
     # the GCP Service Connector. Just set the `authMethod` field to the
     # authentication method that you want to use and set the required
     # configuration attributes under the `authConfig` field.
-    # 
+    #
     # For a list of supported authentication methods and their configuration
     # options, see the following documentation:
     # https://docs.zenml.io/how-to/auth-management/gcp-service-connector#authentication-methods
-    # 
+    #
     # You can also use the ZenML CLI to get the list of supported authentication
     # methods and their configuration options, e.g.:
     #
@@ -714,7 +714,7 @@ zenml:
         # The GCP service account credentials to use to authenticate with the
         # GCP Secrets Manager instance. Required if the `authMethod` is set to
         # `service-account` or `impersonation`.
-        service_account_json: 
+        service_account_json:
 
         # The GCP service account to impersonate when authenticating with the
         # GCP Secrets Manager instance. Required if the `authMethod` is set to
@@ -735,11 +735,11 @@ zenml:
     # the Azure Service Connector. Just set the `authMethod` field to the
     # authentication method that you want to use and set the required
     # configuration attributes under the `authConfig` field.
-    # 
+    #
     # For a list of supported authentication methods and their configuration
     # options, see the following documentation:
     # https://docs.zenml.io/how-to/auth-management/azure-service-connector#authentication-methods
-    # 
+    #
     # You can also use the ZenML CLI to get the list of supported authentication
     # methods and their configuration options, e.g.:
     #
@@ -816,7 +816,7 @@ zenml:
   # default value.
   # - `disabled`, `off`, `false`, `none` or `no` - disables the secure header
   # entirely, so that it is not set in the ZenML server's HTTP responses.
-  # - any other value - sets the secure header to the specified value.  
+  # - any other value - sets the secure header to the specified value.
   secure_headers:
     # The `Server` HTTP header value used to identify the server. The default
     # value is the ZenML server ID.
@@ -866,7 +866,7 @@ zenml:
     enabled: true
     className: "nginx"
     annotations:
-      # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
       # nginx.ingress.kubernetes.io/rewrite-target: /$1
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"

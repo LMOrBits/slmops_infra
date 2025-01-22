@@ -1,0 +1,20 @@
+# secrets:
+#   databaseConnectionString: postgres://postgres:myPassword@postsql-server-postgresql.default.svc.cluster.local:5432/lakefs?search_path=lakefs
+
+lakefsConfig: |-
+  database:
+    type: local
+  blockstore:
+    type: gs
+    gs:
+      credentials_json: /etc/lakefs/credentials/credentials.json
+
+extraVolumeMounts:
+  - name: gcs-credentials
+    mountPath: /etc/lakefs/credentials
+
+extraVolumes:
+  - name: gcs-credentials
+    secret:
+      secretName: gcs-credentials
+

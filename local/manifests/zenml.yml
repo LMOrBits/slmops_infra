@@ -1,5 +1,6 @@
-# helm install zenml-server ./zenml --values zenml.yml
+# http://zenml-server.zenml.svc.cluster.local
 zenml:
+  deploymentType: kubernetes
   service:
     type: ClusterIP
     port: 8080
@@ -7,9 +8,10 @@ zenml:
     enabled: true
     className: nginx
     annotations:
-      nginx.ingress.kubernetes.io/ssl-redirect: "false" # Change to "true" if you want HTTPS
-      nginx.ingress.kubernetes.io/rewrite-target: / # Enable URL path rewriting
-    host: zenml.localhost # Replace with your desired hostname
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      nginx.ingress.kubernetes.io/port: "80"
+    host: zenml.localhost
     path: /
     tls:
       enabled: false

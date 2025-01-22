@@ -1,0 +1,35 @@
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: test
+servers: 1
+agents: 0
+kubeAPI:
+  host: "127.0.0.1" # Expose the Kubernetes API server on localhost
+  hostPort: 
+    - "6443" # Kubernetes API port exposed on the host
+    
+image: rancher/k3s:v1.31.4-k3s1
+token: superSecretToken # Token for joining agents
+network: my-local-net
+options:
+  k3d:
+    wait: true
+    timeout: "60s"
+  k3s:
+    extraArgs:
+      - arg: --tls-san=my.host.domain
+        nodeFilters:
+          - server:*
+      - arg: --lb-server-port=6444 # Set the custom load balancer port
+        nodeFilters:
+          - agent:* # Apply to all agents
+  kubeconfig:
+    updateDefaultKubeconfig: true
+    switchCurrentContext: true
+
+
+
+# docker exec -it k3d-mycluster-server-0 cat /var/lib/rancher/k3s/server/node-token
+
+

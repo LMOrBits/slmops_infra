@@ -1,0 +1,28 @@
+ingress:
+  enabled: true
+  hostname: dremio.localhost
+  ingressClassName: nginx
+
+service:
+  ports:
+    web: 8080
+
+dremio:
+  auth:
+    enabled: true
+    username: admin
+    password: admin
+
+masterCoordinator:
+  dremioConf:
+    # General configuration overrides for Nessie
+    # # Sensitive configurations using Kubernetes secrets
+    secretConfigOverrides:
+      nessie.gcs.credentials.file: "/etc/gcs/credentials.json"  # Reference to the mounted secret
+
+    extraSecretFiles:
+        secretName: gcs-credentials
+        key: credentials.json
+        mountPath: /etc/gcs
+    # Link to an existing ConfigMap or Secret if needed
+    existingSecret: gcs-credentials  # Name of the secret with sensitive data (e.g., GCS credentials)
