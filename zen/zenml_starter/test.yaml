@@ -1,0 +1,173 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+  namespace: zenml
+
+spec:
+  serviceAccountName: zenml-service-account
+  containers:
+  - name: my-app
+    # image: europe-north1-docker.pkg.dev/slmops-dev/images-dev/zenml@sha256:74cd51ffa9343a49abb462c334be5c127ac152347acacae832da26b551ce2fca
+    # image: nginx
+    image: europe-north1-docker.pkg.dev/slmops-dev/images-dev/nginx-custom:latest
+    imagePullPolicy: Always
+  # imagePullSecrets:
+  # - name: artifact-registry-secret
+
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   creationTimestamp: "2025-01-16T19:55:34Z"
+#   labels:
+#     pipeline: feature-engineering
+#     run: feature-engineering-aa5d7d9720c0e7b924f58ae4ade8e253
+#   name: feature-engineering-aa5d7d9720c0e7b924f58ae4ade8e253
+#   namespace: zenml
+#   resourceVersion: "2033"
+#   uid: 8c3121f3-289c-4dd1-8cd7-a9f6df25a063
+# spec:
+#   containers:
+#   - args:
+#     - --run_name
+#     - feature_engineering_aa5d7d9720c0e7b924f58ae4ade8e253
+#     - --deployment_id
+#     - 26aa37e8-fe57-4a17-84a6-e6e7787e5219
+#     - --kubernetes_namespace
+#     - zenml
+#     command:
+#     - python
+#     - -m
+#     - zenml.integrations.kubernetes.orchestrators.kubernetes_orchestrator_entrypoint
+#     env:
+#     - name: ZENML_USER_ID
+#       value: a9e9bc6f-10cd-45dc-a141-4f97b7bda4f4
+#     - name: ZENML_ANALYTICS_OPT_IN
+#       value: "True"
+#     - name: ZENML_VERSION
+#       value: 0.71.0
+#     - name: ZENML_ACTIVE_STACK_ID
+#       value: b9713499-509e-4c2a-bb7c-3ffd6b99e479
+#     - name: ZENML_ACTIVE_WORKSPACE_NAME
+#       value: default
+#     - name: ZENML_STORE_TYPE
+#       value: rest
+#     - name: ZENML_STORE_URL
+#       value: http://zenml.localhost
+#     - name: ZENML_STORE_VERIFY_SSL
+#       value: "True"
+#     - name: ZENML_STORE_HTTP_TIMEOUT
+#       value: "30"
+#     - name: ZENML_STORE_API_TOKEN
+#       value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0YjAzNzUzZS0wNjdjLTRiYTQtOGM1My04Y2Y5NWUwNmUwZjEiLCJpc3MiOiIyNGYzMzg0ZS04MDAxLTQ2N2EtYmM1NC05MDM0NGRhZDY5YmYiLCJhdWQiOiIyNGYzMzg0ZS04MDAxLTQ2N2EtYmM1NC05MDM0NGRhZDY5YmYiLCJkZXZpY2VfaWQiOiJiZWQzYjkzYS0yYmVhLTQxNmUtOTBjMy1iMzJkNGRlZTgyNTUiLCJwaXBlbGluZV9ydW5faWQiOiI0YTBjZDVmYi02NzRmLTRmMDUtOTM0MS00MjFlNjFmZjViZDIifQ.3vXXKguinSUbh8Gx4BAKiWmJQGz4lwp9zLKUk236FmE
+#     - name: DISABLE_CREDENTIALS_DISK_CACHING
+#       value: "true"
+#     - name: ZENML_ACTIVE_WORKSPACE_ID
+#       value: 5bc4c7ba-8916-44da-81ab-51303c7ed83b
+#     - name: ZENML_ENABLE_REPO_INIT_WARNINGS
+#       value: "False"
+#     image: europe-north1-docker.pkg.dev/slmops-dev/images-dev/zenml@sha256:74cd51ffa9343a49abb462c334be5c127ac152347acacae832da26b551ce2fca
+#     imagePullPolicy: IfNotPresent
+#     name: main
+#     resources:
+#       requests:
+#         cpu: 100m
+#         memory: 400Mi
+#     securityContext:
+#       privileged: false
+#     terminationMessagePath: /dev/termination-log
+#     terminationMessagePolicy: File
+#     volumeMounts:
+#     - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+#       name: kube-api-access-hj9dm
+#       readOnly: true
+#   dnsPolicy: ClusterFirst
+#   enableServiceLinks: true
+#   nodeName: k3d-slmops-cluster-agent-0
+#   preemptionPolicy: PreemptLowerPriority
+#   priority: 0
+#   restartPolicy: Never
+#   schedulerName: default-scheduler
+#   securityContext: {}
+#   serviceAccount: zenml-service-account
+#   serviceAccountName: zenml-service-account
+#   terminationGracePeriodSeconds: 30
+#   tolerations:
+#   - effect: NoExecute
+#     key: node.kubernetes.io/not-ready
+#     operator: Exists
+#     tolerationSeconds: 300
+#   - effect: NoExecute
+#     key: node.kubernetes.io/unreachable
+#     operator: Exists
+#     tolerationSeconds: 300
+#   volumes:
+#   - name: kube-api-access-hj9dm
+#     projected:
+#       defaultMode: 420
+#       sources:
+#       - serviceAccountToken:
+#           expirationSeconds: 3607
+#           path: token
+#       - configMap:
+#           items:
+#           - key: ca.crt
+#             path: ca.crt
+#           name: kube-root-ca.crt
+#       - downwardAPI:
+#           items:
+#           - fieldRef:
+#               apiVersion: v1
+#               fieldPath: metadata.namespace
+#             path: namespace
+# status:
+#   conditions:
+#   - lastProbeTime: null
+#     lastTransitionTime: "2025-01-16T19:55:36Z"
+#     status: "True"
+#     type: PodReadyToStartContainers
+#   - lastProbeTime: null
+#     lastTransitionTime: "2025-01-16T19:55:34Z"
+#     status: "True"
+#     type: Initialized
+#   - lastProbeTime: null
+#     lastTransitionTime: "2025-01-16T19:55:34Z"
+#     message: 'containers with unready status: [main]'
+#     reason: ContainersNotReady
+#     status: "False"
+#     type: Ready
+#   - lastProbeTime: null
+#     lastTransitionTime: "2025-01-16T19:55:34Z"
+#     message: 'containers with unready status: [main]'
+#     reason: ContainersNotReady
+#     status: "False"
+#     type: ContainersReady
+#   - lastProbeTime: null
+#     lastTransitionTime: "2025-01-16T19:55:34Z"
+#     status: "True"
+#     type: PodScheduled
+#   containerStatuses:
+#   - image: europe-north1-docker.pkg.dev/slmops-dev/images-dev/zenml@sha256:74cd51ffa9343a49abb462c334be5c127ac152347acacae832da26b551ce2fca
+#     imageID: ""
+#     lastState: {}
+#     name: main
+#     ready: false
+#     restartCount: 0
+#     started: false
+#     state:
+#       waiting:
+#         message: 'failed to pull and unpack image "europe-north1-docker.pkg.dev/slmops-dev/images-dev/zenml@sha256:74cd51ffa9343a49abb462c334be5c127ac152347acacae832da26b551ce2fca":
+#           failed to resolve reference "europe-north1-docker.pkg.dev/slmops-dev/images-dev/zenml@sha256:74cd51ffa9343a49abb462c334be5c127ac152347acacae832da26b551ce2fca":
+#           failed to authorize: failed to fetch anonymous token: unexpected status
+#           from GET request to https://europe-north1-docker.pkg.dev/v2/token?scope=repository%3Aslmops-dev%2Fimages-dev%2Fzenml%3Apull&service=europe-north1-docker.pkg.dev:
+#           403 Forbidden'
+#         reason: ErrImagePull
+#   hostIP: 172.28.0.4
+#   hostIPs:
+#   - ip: 172.28.0.4
+#   phase: Pending
+#   podIP: 10.42.0.7
+#   podIPs:
+#   - ip: 10.42.0.7
+#   qosClass: Burstable
+#   startTime: "2025-01-16T19:55:34Z"

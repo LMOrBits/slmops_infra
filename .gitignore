@@ -55,7 +55,7 @@ terraform.rc
 .Spotlight-V100
 .Trashes
 ehthumbs.db
-Thumbs.db 
+Thumbs.db
 
 # Credentials and Secrets
 *.key
@@ -81,7 +81,8 @@ log/
 
 # Local development
 .local/
-.history/ 
+.history/
 
 cloud/terraform/environments/dev/keys/*
 
+**/.zenml/*

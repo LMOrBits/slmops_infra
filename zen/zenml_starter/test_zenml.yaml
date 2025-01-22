@@ -1,0 +1,156 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2025-01-16T17:46:45Z"
+  labels:
+    pipeline: feature-engineering
+    run: feature-engineering-5e155257a9f5213dee4a0bfaf02018f0
+  name: feature-engineering-5e155257a9f5213dee4a0bfaf02018f0
+  namespace: zenml
+  resourceVersion: "5218"
+  uid: 5853416e-4c82-468d-8afc-0aa50e2e056c
+spec:
+  containers:
+  
+  - args:
+    - --run_name
+    - feature_engineering_5e155257a9f5213dee4a0bfaf02018f0
+    - --deployment_id
+    - b7470263-5949-4eee-9efa-8dbf56db6f46
+    - --kubernetes_namespace
+    - zenml
+    command:
+    - python
+    - -m
+    - zenml.integrations.kubernetes.orchestrators.kubernetes_orchestrator_entrypoint
+    env:
+    - name: ZENML_USER_ID
+      value: a9e9bc6f-10cd-45dc-a141-4f97b7bda4f4
+    - name: ZENML_ANALYTICS_OPT_IN
+      value: "True"
+    - name: ZENML_VERSION
+      value: 0.72.0
+    - name: ZENML_ACTIVE_STACK_ID
+      value: d5068e9e-31c7-4bfa-8e54-699b48bb1bf3
+    - name: ZENML_ACTIVE_WORKSPACE_NAME
+      value: default
+    - name: ZENML_STORE_TYPE
+      value: rest
+    - name: ZENML_STORE_URL
+      value: http://zenml.localhost:8080
+    - name: ZENML_STORE_VERIFY_SSL
+      value: "True"
+    - name: ZENML_STORE_HTTP_TIMEOUT
+      value: "30"
+    - name: ZENML_STORE_API_TOKEN
+      value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0Y2M1NzYzOS1jNDMxLTQ5YzQtYTUyMS0zMmI4ZmMwZDBjODkiLCJpc3MiOiI5Njc0YjRkYS0xNmQ1LTQwMGEtYjQwYi02NDEwYTM5MGRkNTUiLCJhdWQiOiI5Njc0YjRkYS0xNmQ1LTQwMGEtYjQwYi02NDEwYTM5MGRkNTUiLCJkZXZpY2VfaWQiOiIxMTlmZDcxMC0yN2RjLTRiYjItOTU1Mi1mMGQzYWM0NjRkZTkiLCJwaXBlbGluZV9ydW5faWQiOiIxYTAxN2ZmNS0zN2NkLTQ1YjgtODM0NC0yMzI2MzQxYzg3YWEifQ.CFDctQZZC6oWhPQGIWhZgDCNu4_ikw2JwElj7Gfc0Bk
+    - name: DISABLE_CREDENTIALS_DISK_CACHING
+      value: "true"
+    - name: ZENML_ACTIVE_WORKSPACE_ID
+      value: e6454b58-484e-4e90-aa63-0795607bdddd
+    - name: ZENML_ENABLE_REPO_INIT_WARNINGS
+      value: "False"
+    image: europe-north1-docker.pkg.dev/slmops-dev/images-dev/zenml@sha256:79a41577ceac38aacb749b53be5104f290f86b27560398fa420cd452833da7a2
+    imagePullPolicy: IfNotPresent
+    
+    name: main
+    resources:
+      requests:
+        cpu: 100m
+        memory: 400Mi
+    securityContext:
+      privileged: false
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-kwgn2
+      readOnly: true
+  imagePullSecrets:
+    - name: artifact-registry-secret
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: k3d-slmops-cluster-agent-1
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Never
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: zenml-service-account
+  serviceAccountName: zenml-service-account
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: kube-api-access-kwgn2
+    projected:
+      defaultMode: 420
+      sources:
+      - serviceAccountToken:
+          expirationSeconds: 3607
+          path: token
+      - configMap:
+          items:
+          - key: ca.crt
+            path: ca.crt
+          name: kube-root-ca.crt
+      - downwardAPI:
+          items:
+          - fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+            path: namespace
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2025-01-16T17:46:46Z"
+    status: "True"
+    type: PodReadyToStartContainers
+  - lastProbeTime: null
+    lastTransitionTime: "2025-01-16T17:46:45Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2025-01-16T17:46:45Z"
+    message: 'containers with unready status: [main]'
+    reason: ContainersNotReady
+    status: "False"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2025-01-16T17:46:45Z"
+    message: 'containers with unready status: [main]'
+    reason: ContainersNotReady
+    status: "False"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2025-01-16T17:46:45Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - image: europe-north1-docker.pkg.dev/slmops-dev/images-dev/zenml@sha256:79a41577ceac38aacb749b53be5104f290f86b27560398fa420cd452833da7a2
+    imageID: ""
+    lastState: {}
+    name: main
+    ready: false
+    restartCount: 0
+    started: false
+    state:
+      waiting:
+        message: Back-off pulling image "europe-north1-docker.pkg.dev/slmops-dev/images-dev/zenml@sha256:79a41577ceac38aacb749b53be5104f290f86b27560398fa420cd452833da7a2"
+        reason: ImagePullBackOff
+  hostIP: 172.28.0.2
+  hostIPs:
+  - ip: 172.28.0.2
+  phase: Pending
+  podIP: 10.42.1.9
+  podIPs:
+  - ip: 10.42.1.9
+  qosClass: Burstable
+  startTime: "2025-01-16T17:46:45Z"

@@ -1,0 +1,5 @@
+catalog:
+  type: nessie
+  uri: http://localhost:19120/api/v1
+  ref: main
+  warehouse: s3://my-iceberg-warehouse

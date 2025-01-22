@@ -1,0 +1,8 @@
+zenml[server]
+dask[complete]>=2024.1.0
+dask-kubernetes>=2024.1.0
+uv
+dlt[duckdb]>=0.4.0
+python-nessie>=0.61.0
+google-cloud-storage>=2.14.0
+datasets>=2.16.0 
