@@ -1,7 +1,4 @@
-provider "google" {
-  project = var.project_id
-  region  = var.region
-}
+
 
 # Enable required APIs
 resource "google_project_service" "compute" {

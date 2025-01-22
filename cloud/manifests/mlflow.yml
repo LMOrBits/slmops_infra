@@ -1,0 +1,21 @@
+tracking:
+  auth:
+    enabled: true
+    username: slmops
+    password: j6rXZAkyS}MOeYha
+  ingress:
+    enabled: true
+    hostname: mlflow.lmorbits.com
+    ingressClassName: nginx
+    tls: true
+minio:
+  enabled: false
+
+
+externalGCS:
+  bucket: "slmops-dev-ml-artifacts"
+  googleCloudProject: "slmops-dev"
+  useCredentialsInSecret: true
+  existingSecret: "gcs-credentials"
+  existingSecretKey: "credentials.json"
+  serveArtifacts: true

@@ -93,7 +93,9 @@ k3s-status:
 k3s-token:
 	ssh -F keys/ssh_config master "sudo cat /var/lib/rancher/k3s/server/node-token"
 
-	
+civo-contex-add:
+	civo kubernetes config slmops --save --switch 
+
 
 # List available instances
 list-instances:

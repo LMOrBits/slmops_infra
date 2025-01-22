@@ -55,3 +55,22 @@ variable "instances_config" {
   description = "Path to the YAML file containing instance configurations"
   type        = string
 }
+
+variable "env" {
+  description = "The environment name"
+  type        = string
+  default     = "dev"
+}
+
+variable "enable_civo_cluster" {
+  description = "Enable Civo cluster"
+  type        = bool
+  default     = false
+}
+
+variable "civo_region" {
+  description = "The Civo region"
+  type        = string
+  default     = "fra1"
+}
+

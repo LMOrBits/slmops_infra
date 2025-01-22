@@ -16,9 +16,9 @@ output "super_admin_key" {
   sensitive   = true
 }
 
-output "super_admin_email" {
-  description = "The email of the super admin service account"
-  value       = google_service_account.super_admin.email
+output "super_admin" {
+  description = "The super admin key"
+  value       = google_service_account_key.super_admin_key.private_key
 }
 
 output "storage_admin_email" {
@@ -30,3 +30,4 @@ output "storage_user_email" {
   description = "The email of the storage user service account"
   value       = google_service_account.storage_user.email
 }
+

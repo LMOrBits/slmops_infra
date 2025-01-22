@@ -1,6 +1,7 @@
-resource "google_artifact_registry_repository" "ml_images" {
+resource "google_artifact_registry_repository" "artifact_store" {
   location      = var.location
-  repository_id = "ml-images-${var.env}"
-  description   = "Docker repository for ML pipeline images"
+  project       = var.project_id
+  repository_id = "images-${var.env}"
+  description   = "Docker repository for ZenML pipeline images"
   format        = "DOCKER"
 }

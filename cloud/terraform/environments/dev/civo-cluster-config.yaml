@@ -1,0 +1,20 @@
+cluster_name: "slmops"
+
+environments:
+  dev:
+    master_config:
+      machine_type: "g4s.kube.medium"
+      node_count: 2
+      zone: "fra1"
+  
+  # staging:
+  #   master_config:
+  #     machine_type: "g4p.kube.medium"
+  #     node_count: 3
+  #     zone: "lon1"
+  
+  # prod:
+  #   master_config:
+  #     machine_type: "g4p.kube.large"
+  #     node_count: 5
+  #     zone: "lon1" 

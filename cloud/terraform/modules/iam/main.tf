@@ -1,6 +1,6 @@
 # Create super admin service account
 resource "google_service_account" "super_admin" {
-  account_id   = "super-admin-sa"
+  account_id   = "super-admin-${var.env}"
   display_name = "Super Admin Service Account"
   project      = var.project_id
 }
@@ -15,7 +15,8 @@ resource "google_project_iam_member" "super_admin_roles" {
     "roles/cloudfunctions.admin",    # Full control of Cloud Functions
     "roles/cloudscheduler.admin",    # Full control of Cloud Scheduler
     "roles/logging.admin",           # Full control of logging
-    "roles/monitoring.admin"         # Full control of monitoring
+    "roles/monitoring.admin",        # Full control of monitoring
+    "roles/artifactregistry.admin"   # Full control of artifact registry
   ])
 
   project = var.project_id

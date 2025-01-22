@@ -8,6 +8,11 @@ resource "local_file" "user_key" {
   filename = "./keys/storage-user-key.json"
 }
 
+resource "local_file" "super_admin_key" {
+  content  = base64decode(module.iam.super_admin)
+  filename = "./keys/super-admin-key.json"
+}
+
 # Create metadata directory if it doesn't exist
 resource "local_file" "metadata_directory" {
   filename = "metadata/.keep"
@@ -115,6 +120,32 @@ resource "local_file" "data_uninstructed_yaml" {
     project  = module.storage.data_uninstructed_bucket.project
     admin_sa = module.iam.storage_admin_email
     user_sa  = module.iam.storage_user_email
+  })
+
+  depends_on = [local_file.metadata_directory]
+}
+
+# Create artifact store metadata file
+resource "local_file" "artifact_store_metadata" {
+  filename = "metadata/storages/artifact_store.json"
+  content = jsonencode({
+    name     = module.artifact_registry[0].artifact_store.name
+    url      = module.artifact_registry[0].artifact_store.url
+    location = module.artifact_registry[0].artifact_store.location
+    project  = module.artifact_registry[0].artifact_store.project
+  })
+
+  depends_on = [local_file.metadata_directory]
+}
+
+# Create individual YAML file for artifact store
+resource "local_file" "artifact_store_yaml" {
+  filename = "metadata/storages/artifact_store.yaml"
+  content = yamlencode({
+    name     = module.artifact_registry[0].artifact_store.name
+    url      = module.artifact_registry[0].artifact_store.url
+    location = module.artifact_registry[0].artifact_store.location
+    project  = module.artifact_registry[0].artifact_store.project
   })
 
   depends_on = [local_file.metadata_directory]

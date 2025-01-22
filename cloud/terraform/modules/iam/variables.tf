@@ -17,3 +17,8 @@ variable "data_uninstructed_bucket_name" {
   description = "Name of the uninstructed data bucket"
   type        = string
 }
+
+variable "env" {
+  description = "The environment name"
+  type        = string
+}

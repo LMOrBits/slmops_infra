@@ -1,0 +1,29 @@
+system:
+  machine_type: "Standard_D2_v2"
+  node_count: 3
+  zones: ["1", "2", "3"]
+  labels:
+    role: system
+  enable_auto_scaling: true
+  min_count: 2
+  max_count: 4
+
+apps:
+  machine_type: "Standard_D4_v2"
+  node_count: 1
+  labels:
+    role: application
+  tags:
+    environment: dev
+    purpose: applications
+
+# ml:
+#   machine_type: "Standard_NC6s_v3"
+#   node_count: 1
+#   labels:
+#     role: ml
+#     gpu: "true"
+#   taints:
+#     - key: "gpu"
+#       value: "true"
+#       effect: "NoSchedule" 
