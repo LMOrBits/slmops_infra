@@ -15,13 +15,18 @@ cluster-start:
 cluster-stop:
 	- echo "to do"
 
-add-gcs-secret:
+add-gcs-secret-lakefs:
 	kubectl create secret generic gcs-credentials --from-file=credentials.json=../cloud/terraform/environments/dev/keys/super-admin-key.json
 
 # --= ingress =--
 # Install ingress-nginx controller
 install-ingress:
-	helm install nginx-ingress ingress-nginx/ingress-nginx --set controller.service.type=LoadBalancer
+	helm install nginx-ingress ingress-nginx/ingress-nginx \
+  --set controller.service.type=LoadBalancer \
+  --set controller.config.proxy-body-size=20g \
+  --set controller.config.proxy-read-timeout=600 \
+  --set controller.config.proxy-send-timeout=600 \
+  --set controller.config.proxy-connect-timeout=600
 
 # --= dremio =--
 install-dremio:
@@ -48,13 +53,25 @@ install-mlflow:
 mlflow-port-forward:
 	kubectl port-forward svc/mlflow-server-tracking 5000:5000
 
-gcloud-auth:
+gcloud-docker-auth-zen:
 	kubectl create secret docker-registry artifact-registry-secret \
 		--docker-server=https://europe-north1-docker.pkg.dev \
-    --docker-username=oauth2accesstoken \
-    --docker-password="$$(gcloud auth print-access-token)" \
+    --docker-username=_json_key \
+    --docker-password="$$(cat ./terraform/environments/dev/keys/super-admin-key.json)" \
+    --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com \
+		--namespace zenml
+
+gcloud-docker-auth:
+	kubectl create secret docker-registry artifact-registry-secret \
+		--docker-server=https://europe-north1-docker.pkg.dev \
+    --docker-username=_json_key \
+    --docker-password="$$(cat ./terraform/environments/dev/keys/super-admin-key.json)" \
     --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com
 
+# --= lakefs =--
+install-lakefs:
+	helm repo add lakefs https://charts.lakefs.io
+	helm upgrade --install lakefs lakefs/lakefs --values ./manifests/lakefs.yaml
 
 # --= kuberay =--
 install-kuberay:
@@ -81,6 +98,7 @@ uninstall-kuberay-cluster:
 uninstall-kuberay-job:
 	kubectl delete -f https://raw.githubusercontent.com/ray-project/kuberay/v1.2.2/ray-operator/config/samples/ray-job.sample.yaml --namespace kuberay-operator
 
+
 # --= spark =--
 get-token:
 	@docker exec -it k3d-test-server-0 cat /var/lib/rancher/k3s/server/node-token
@@ -90,7 +108,16 @@ debug:
 
 delete-debug:
 	kubectl delete pod debug-pod -n zenml
+
+## --= optik =--
+install-optik:
+	helm repo add opik https://comet-ml.github.io/opik/
+	helm repo update
+
 # --= status =--
+
+
+
 # List all RayJob custom resources in the `default` namespace.
 status-kuberay-jobs:
 	@echo "Fetching all RayJob statuses..."

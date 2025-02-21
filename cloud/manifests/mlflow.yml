@@ -7,7 +7,22 @@ tracking:
     enabled: true
     hostname: mlflow.lmorbits.com
     ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: "5000m"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "800"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "800"
+      nginx.ingress.kubernetes.io/proxy-connect-timeout: "800"
     tls: true
+  resources:
+    limits:
+      memory: "6Gi"
+      cpu: "4"
+    requests:
+      memory: "4Gi"
+      cpu: "2"
+  extraEnvVars:
+    - name: GUNICORN_CMD_ARGS
+      value: "--timeout 600 --workers 4"
 minio:
   enabled: false
 
@@ -19,3 +34,4 @@ externalGCS:
   existingSecret: "gcs-credentials"
   existingSecretKey: "credentials.json"
   serveArtifacts: true
+

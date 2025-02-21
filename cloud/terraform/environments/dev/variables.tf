@@ -65,7 +65,7 @@ variable "env" {
 variable "enable_civo_cluster" {
   description = "Enable Civo cluster"
   type        = bool
-  default     = false
+  default     = false 
 }
 
 variable "civo_region" {
@@ -73,4 +73,7 @@ variable "civo_region" {
   type        = string
   default     = "fra1"
 }
+
+
+
 

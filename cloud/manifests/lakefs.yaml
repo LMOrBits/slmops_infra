@@ -1,13 +1,31 @@
 # secrets:
 #   databaseConnectionString: postgres://postgres:myPassword@postsql-server-postgresql.default.svc.cluster.local:5432/lakefs?search_path=lakefs
 
-lakefsConfig: |-
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  ingressClassName: nginx
+  defaultBackend: {}
+  hosts:
+    - host: lakefs.lmorbits.com
+      paths: 
+        - /
+  tls:
+    - secretName: lakefs-tls
+      hosts:
+        - lakefs.lmorbits.com
+
+lakefsConfig: |
   database:
     type: local
   blockstore:
     type: gs
     gs:
-      credentials_json: /etc/lakefs/credentials/credentials.json
+      credentials_file: /etc/lakefs/credentials/credentials.json
 
 extraVolumeMounts:
   - name: gcs-credentials
@@ -18,3 +36,6 @@ extraVolumes:
     secret:
       secretName: gcs-credentials
 
+
+# access = AKIAJGRIKV45UEZ6EU7Q
+# Secret Access Key = 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

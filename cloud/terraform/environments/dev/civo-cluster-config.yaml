@@ -3,7 +3,7 @@ cluster_name: "slmops"
 environments:
   dev:
     master_config:
-      machine_type: "g4s.kube.medium"
+      machine_type: "g4p.kube.small"
       node_count: 2
       zone: "fra1"
   
