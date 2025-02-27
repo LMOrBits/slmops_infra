@@ -1,0 +1,54 @@
+version: "3"
+
+vars:
+  SUPER_ADMIN_KEY: cloud/terraform/environments/dev/keys/super-admin-key.json
+
+tasks:
+  docker-auth:
+    desc: Create docker registry secret for default namespace
+    cmds:
+    - |
+      kubectl create secret docker-registry artifact-registry-secret \
+        --docker-server=https://europe-north1-docker.pkg.dev \
+        --docker-username=_json_key \
+        --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
+        --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com
+
+  docker-auth-zen:
+    desc: Create docker registry secret for ZenML namespace
+    cmds:
+    - |
+      kubectl create secret docker-registry artifact-registry-secret \
+        --docker-server=https://europe-north1-docker.pkg.dev \
+        --docker-username=_json_key \
+        --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
+        --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com \
+        --namespace {{.NAMESPACE_ZENML}}
+
+  add-gcs-secret-lakefs:
+    desc: Create GCS credentials secret for LakeFS
+    cmds:
+    - |
+      kubectl create secret generic gcs-credentials \
+        --from-file=credentials.json={{.SUPER_ADMIN_KEY}} 
+
+  gcloud-docker-auth:
+    desc: Create docker registry secret for default namespace
+    cmds:
+    - |
+      kubectl create secret docker-registry artifact-registry-secret \
+        --docker-server=https://europe-north1-docker.pkg.dev \
+        --docker-username=_json_key \
+        --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
+        --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com
+
+  gcloud-docker-auth-zen:
+    desc: Create docker registry secret for ZenML namespace
+    cmds:
+    - |
+      kubectl create secret docker-registry artifact-registry-secret \
+        --docker-server=https://europe-north1-docker.pkg.dev \
+        --docker-username=_json_key \
+        --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
+        --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com \
+        --namespace {{.NAMESPACE_ZENML}}

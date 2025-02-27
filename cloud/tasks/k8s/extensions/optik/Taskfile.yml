@@ -1,0 +1,9 @@
+version: "3"
+
+tasks:
+  install:
+    desc: Install Optik
+    cmds:
+    - |
+      helm repo add opik https://comet-ml.github.io/opik/ && \
+      helm repo update 

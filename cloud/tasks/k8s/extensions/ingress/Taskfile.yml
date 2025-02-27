@@ -1,0 +1,33 @@
+version: "3"
+
+tasks:
+  install-ingress:
+    desc: Install nginx ingress controller
+    cmds:
+    - |
+      helm install nginx-ingress ingress-nginx/ingress-nginx \
+        --set controller.service.type=LoadBalancer \
+        --set controller.config.proxy-body-size=4g \
+        --set controller.config.proxy-read-timeout=600 \
+        --set controller.config.proxy-send-timeout=600 \
+        --set controller.config.proxy-connect-timeout=600
+
+  status-ingress:
+    desc: Check ingress status
+    cmds:
+    - |
+      echo "\nIngress Controller Status:"
+      kubectl get pods -n ingress-nginx
+      echo "\nIngress Services:"
+      kubectl get svc -n ingress-nginx
+
+  debug-ingress:
+    desc: Debug ingress configuration and logs
+    cmds:
+    - |
+      echo "\nIngress Resources:"
+      kubectl get ingress -A
+      echo "\nIngress Controller Logs:"
+      kubectl logs -n ingress-nginx -l app.kubernetes.io/name=ingress-nginx
+      echo "\nIngress Controller Events:"
+      kubectl get events -n ingress-nginx

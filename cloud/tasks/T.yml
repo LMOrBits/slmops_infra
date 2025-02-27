@@ -1,0 +1,234 @@
+version: "3"
+includes:
+  iac: ./iac/Taskfile.yml
+vars:
+  NAMESPACE_ZENML: zenml
+  NAMESPACE_KUBERAY: kuberay-operator
+
+tasks:
+  gcloud-docker-auth:
+    desc: Create docker registry secret for default namespace
+    cmds:
+    - |
+      kubectl create secret docker-registry artifact-registry-secret \
+        --docker-server=https://europe-north1-docker.pkg.dev \
+        --docker-username=_json_key \
+        --docker-password="$(cat ./terraform/environments/dev/keys/super-admin-key.json)" \
+        --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com
+
+  gcloud-docker-auth-zen:
+    desc: Create docker registry secret for ZenML namespace
+    cmds:
+    - |
+      kubectl create secret docker-registry artifact-registry-secret \
+        --docker-server=https://europe-north1-docker.pkg.dev \
+        --docker-username=_json_key \
+        --docker-password="$(cat ./terraform/environments/dev/keys/super-admin-key.json)" \
+        --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com \
+        --namespace {{.NAMESPACE_ZENML}}
+
+  # Ingress Tasks
+  install-ingress:
+    desc: Install nginx ingress controller
+    cmds:
+    - |
+      helm install nginx-ingress ingress-nginx/ingress-nginx \
+        --set controller.service.type=LoadBalancer \
+        --set controller.config.proxy-body-size=4g \
+        --set controller.config.proxy-read-timeout=600 \
+        --set controller.config.proxy-send-timeout=600 \
+        --set controller.config.proxy-connect-timeout=600
+
+  # MLflow Tasks
+  install-mlflow:
+    desc: Install or upgrade MLflow server
+    cmds:
+    - helm upgrade --install mlflow-server ./manifests/mlflow --values ./manifests/mlflow.yml
+
+  mlflow-port-forward:
+    desc: Port forward MLflow server to localhost:5000
+    cmds:
+    - kubectl port-forward svc/mlflow-server-tracking 5000:5000
+
+  # ZenML Tasks
+  install-zenml:
+    desc: Install or upgrade ZenML server
+    cmds:
+    - |
+      helm upgrade --install zenml-server ./manifests/zenml \
+        --values ./manifests/zenml.yml \
+        --create-namespace \
+        --namespace {{.NAMESPACE_ZENML}}
+
+  zenml-port-forward:
+    desc: Port forward ZenML server to localhost:8080
+    cmds:
+    - kubectl port-forward -n {{.NAMESPACE_ZENML}} svc/zenml-server 8080:8080
+
+  # Nessie Tasks
+  install-nessie:
+    desc: Install Project Nessie
+    cmds:
+    - |
+      helm repo add nessie-helm https://charts.projectnessie.org && \
+      helm repo update && \
+      helm install -n nessie-ns nessie nessie-helm/nessie --create-namespace
+
+  # LakeFS Tasks
+  install-lakefs:
+    desc: Install or upgrade LakeFS
+    cmds:
+    - |
+      helm repo add lakefs https://charts.lakefs.io && \
+      helm upgrade --install lakefs lakefs/lakefs --values ./manifests/lakefs.yaml
+
+  # KubeRay Tasks
+  install-kuberay:
+    desc: Install KubeRay operator
+    cmds:
+    - |
+      helm upgrade --install kuberay-operator ./manifests/ray/kuberay-operator \
+        --values ./manifests/ray/ray-values.yaml \
+        --create-namespace \
+        --namespace {{.NAMESPACE_KUBERAY}}
+
+  kuberay-cluster:
+    desc: Install KubeRay cluster
+    cmds:
+    - |
+      helm install raycluster kuberay/ray-cluster \
+        --version 1.2.2 \
+        --set 'image.tag=2.9.0-aarch64' \
+        --namespace {{.NAMESPACE_KUBERAY}}
+
+  kuberay-port-forward:
+    desc: Port forward KubeRay cluster
+    cmds:
+    - kubectl port-forward svc/raycluster-kuberay-head-svc 10001:10001 8265:8265 --namespace {{.NAMESPACE_KUBERAY}}
+
+  # Status Check Tasks
+  status-mlflow:
+    desc: Check MLflow deployment status
+    cmds:
+    - |
+      echo "\nMLflow Pods:"
+      kubectl get pods | grep mlflow
+      echo "\nMLflow Services:"
+      kubectl get svc | grep mlflow
+      echo "\nMLflow Ingress:"
+      kubectl get ingress | grep mlflow
+
+  status-zenml:
+    desc: Check ZenML deployment status
+    cmds:
+    - |
+      echo "\nZenML Pods:"
+      kubectl get pods | grep zenml
+      echo "\nZenML Services:"
+      kubectl get svc | grep zenml
+      echo "\nZenML Ingress:"
+      kubectl get ingress | grep zenml
+
+  status-ingress:
+    desc: Check ingress status
+    cmds:
+    - |
+      echo "\nIngress Controller Status:"
+      kubectl get pods -n ingress-nginx
+      echo "\nIngress Services:"
+      kubectl get svc -n ingress-nginx
+
+  # Debug Tasks
+  debug:
+    desc: Create and access a debug pod in the ZenML namespace
+    cmds:
+    - |
+      kubectl run -it --rm debug-pod \
+        --image=busybox \
+        --restart=Never \
+        --namespace={{.NAMESPACE_ZENML}} -- sh || \
+      kubectl exec -it debug-pod -n {{.NAMESPACE_ZENML}} -- sh
+
+  debug-ingress:
+    desc: Debug ingress configuration and logs
+    cmds:
+    - |
+      echo "\nIngress Resources:"
+      kubectl get ingress -A
+      echo "\nIngress Controller Logs:"
+      kubectl logs -n ingress-nginx -l app.kubernetes.io/name=ingress-nginx
+      echo "\nIngress Controller Events:"
+      kubectl get events -n ingress-nginx 
+
+  # LakeFS Tasks
+  add-gcs-secret-lakefs:
+    desc: Create GCS credentials secret for LakeFS
+    cmds:
+    - |
+      kubectl create secret generic gcs-credentials \
+        --from-file=credentials.json=../cloud/terraform/environments/dev/keys/super-admin-key.json
+
+  # Dremio Tasks
+  install-dremio:
+    desc: Install Dremio
+    cmds:
+    - helm install dremio ./manifests/dremio --values ./manifests/dremio.yaml
+
+  # Additional KubeRay Tasks
+  install-kuberay-job:
+    desc: Install KubeRay job sample
+    cmds:
+    - kubectl apply -f https://raw.githubusercontent.com/ray-project/kuberay/v1.2.2/ray-operator/config/samples/ray-job.sample.yaml --namespace {{.NAMESPACE_KUBERAY}}
+
+  install-kuberay-service:
+    desc: Install KubeRay service sample
+    cmds:
+    - kubectl apply -f https://raw.githubusercontent.com/ray-project/kuberay/v1.2.2/ray-operator/config/samples/ray-service.sample.yaml --namespace {{.NAMESPACE_KUBERAY}}
+
+  uninstall-kuberay-service:
+    desc: Uninstall KubeRay service
+    cmds:
+    - kubectl delete -f https://raw.githubusercontent.com/ray-project/kuberay/v1.2.2/ray-operator/config/samples/ray-service.sample.yaml --namespace {{.NAMESPACE_KUBERAY}}
+
+  uninstall-kuberay-cluster:
+    desc: Uninstall KubeRay cluster
+    cmds:
+    - helm uninstall raycluster --namespace {{.NAMESPACE_KUBERAY}}
+
+  uninstall-kuberay-job:
+    desc: Uninstall KubeRay job
+    cmds:
+    - kubectl delete -f https://raw.githubusercontent.com/ray-project/kuberay/v1.2.2/ray-operator/config/samples/ray-job.sample.yaml --namespace {{.NAMESPACE_KUBERAY}}
+
+  # Status Tasks
+  status-kuberay-jobs:
+    desc: Check status of KubeRay jobs and clusters
+    cmds:
+    - |
+      echo "Fetching all RayJob statuses..."
+      kubectl get rayjob -n {{.NAMESPACE_KUBERAY}}
+      echo "\nFetching all RayCluster statuses..."
+      kubectl get raycluster -n {{.NAMESPACE_KUBERAY}}
+      echo "\nFetching all Pods..."
+      kubectl get pods -n {{.NAMESPACE_KUBERAY}}
+      echo "\nChecking the status of the RayJob..."
+      kubectl get rayjobs.ray.io rayjob-sample -o jsonpath='{.status.jobStatus}' -n {{.NAMESPACE_KUBERAY}}
+      echo "[Expected output]: \"SUCCEEDED\""
+      echo "\nChecking the deployment status of the RayJob..."
+      kubectl get rayjobs.ray.io rayjob-sample -o jsonpath='{.status.jobDeploymentStatus}' -n {{.NAMESPACE_KUBERAY}}
+      echo "[Expected output]: \"Complete\""
+
+  # Utility Tasks
+
+  delete-debug:
+    desc: Delete debug pod in ZenML namespace
+    cmds:
+    - kubectl delete pod debug-pod -n {{.NAMESPACE_ZENML}}
+
+  # Optik Tasks
+  install-optik:
+    desc: Install Optik
+    cmds:
+    - |
+      helm repo add opik https://comet-ml.github.io/opik/ && \
+      helm repo update

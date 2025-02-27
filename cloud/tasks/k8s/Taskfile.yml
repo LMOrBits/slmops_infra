@@ -1,0 +1,6 @@
+version: "3"
+
+includes:
+  gcloud: ./gcloud/Taskfile.yml
+  extensions: ./extensions/Taskfile.yml
+  utils: ./utils/Taskfile.yml

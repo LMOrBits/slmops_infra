@@ -1,0 +1,26 @@
+version: "3"
+
+vars:
+  PROJECT_ID: slmops-dev
+  DEV_ENVIRONMENT: dev
+  REGION: europe-north1
+
+tasks:
+  initiate-backend-storage:
+    desc: Creates and configures a Google Cloud Storage bucket for Terraform backend. Sets up required GCS bucket for state files with versioning enabled. Must be run before initializing any environment.
+    dir: cloud/terraform/init
+    cmds:
+    - terraform init
+    - terraform apply -var="project_id={{.PROJECT_ID}}" -var="region={{.REGION}}" --auto-approve
+
+  init-dev-environment:
+    desc: Initializes and applies Terraform configurations for the development environment. based on the terraform.tfvars file in the environment/dev directory.
+    dotenv: [ "{{.USER_WORKING_DIR}}/cloud/terraform/environments/dev/.env" ]
+    dir: cloud/terraform/environments/dev
+    cmds:
+    - terraform init
+    - |
+      terraform apply 
+      -var="project_id={{.PROJECT_ID}}" 
+      -var="region={{.REGION}}" 
+      --auto-approve

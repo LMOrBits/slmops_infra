@@ -1,0 +1,7 @@
+version: "3"
+includes:
+  mlflow: ./mlflow/Taskfile.yml
+  zenml: ./zenml/Taskfile.yml
+  kuberay: ./kuberay/Taskfile.yml
+  optik: ./optik/Taskfile.yml
+  ingress: ./ingress/Taskfile.yml

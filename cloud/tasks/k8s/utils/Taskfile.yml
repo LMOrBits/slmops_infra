@@ -1,0 +1,17 @@
+version: "3"
+
+tasks:
+  debug:
+    desc: Create and access a debug pod in the {{.NAMESPACE_DEBUG}} namespace
+    cmds:
+    - |
+      kubectl run -it --rm debug-pod \
+        --image=busybox \
+        --restart=Never \
+        --namespace={{.NAMESPACE_DEBUG}} -- sh || \
+      kubectl exec -it debug-pod -n {{.NAMESPACE_DEBUG}} -- sh
+
+  delete-debug:
+    desc: Delete debug pod in {{.NAMESPACE_DEBUG}} namespace
+    cmds:
+    - kubectl delete pod debug-pod -n {{.NAMESPACE_DEBUG}}

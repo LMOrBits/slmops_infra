@@ -1,0 +1,67 @@
+version: "3"
+
+tasks:
+  install:
+    desc: Install KubeRay operator
+    cmds:
+    - |
+      helm upgrade --install kuberay-operator ./manifests/ray/kuberay-operator \
+        --values ./manifests/ray/ray-values.yaml \
+        --create-namespace \
+        --namespace {{.NAMESPACE_KUBERAY}}
+
+  install-cluster:
+    desc: Install KubeRay cluster
+    cmds:
+    - |
+      helm install raycluster kuberay/ray-cluster \
+        --version 1.2.2 \
+        --set 'image.tag=2.9.0-aarch64' \
+        --namespace {{.NAMESPACE_KUBERAY}}
+
+  install-job:
+    desc: Install KubeRay job sample
+    cmds:
+    - kubectl apply -f https://raw.githubusercontent.com/ray-project/kuberay/v1.2.2/ray-operator/config/samples/ray-job.sample.yaml --namespace {{.NAMESPACE_KUBERAY}}
+
+  install-service:
+    desc: Install KubeRay service sample
+    cmds:
+    - kubectl apply -f https://raw.githubusercontent.com/ray-project/kuberay/v1.2.2/ray-operator/config/samples/ray-service.sample.yaml --namespace {{.NAMESPACE_KUBERAY}}
+
+  port-forward:
+    desc: Port forward KubeRay cluster
+    cmds:
+    - kubectl port-forward svc/raycluster-kuberay-head-svc 10001:10001 8265:8265 --namespace {{.NAMESPACE_KUBERAY}}
+
+  uninstall-service:
+    desc: Uninstall KubeRay service
+    cmds:
+    - kubectl delete -f https://raw.githubusercontent.com/ray-project/kuberay/v1.2.2/ray-operator/config/samples/ray-service.sample.yaml --namespace {{.NAMESPACE_KUBERAY}}
+
+  uninstall-cluster:
+    desc: Uninstall KubeRay cluster
+    cmds:
+    - helm uninstall raycluster --namespace {{.NAMESPACE_KUBERAY}}
+
+  uninstall-job:
+    desc: Uninstall KubeRay job
+    cmds:
+    - kubectl delete -f https://raw.githubusercontent.com/ray-project/kuberay/v1.2.2/ray-operator/config/samples/ray-job.sample.yaml --namespace {{.NAMESPACE_KUBERAY}}
+
+  status:
+    desc: Check status of KubeRay jobs and clusters
+    cmds:
+    - |
+      echo "Fetching all RayJob statuses..."
+      kubectl get rayjob -n {{.NAMESPACE_KUBERAY}}
+      echo "\nFetching all RayCluster statuses..."
+      kubectl get raycluster -n {{.NAMESPACE_KUBERAY}}
+      echo "\nFetching all Pods..."
+      kubectl get pods -n {{.NAMESPACE_KUBERAY}}
+      echo "\nChecking the status of the RayJob..."
+      kubectl get rayjobs.ray.io rayjob-sample -o jsonpath='{.status.jobStatus}' -n {{.NAMESPACE_KUBERAY}}
+      echo "[Expected output]: \"SUCCEEDED\""
+      echo "\nChecking the deployment status of the RayJob..."
+      kubectl get rayjobs.ray.io rayjob-sample -o jsonpath='{.status.jobDeploymentStatus}' -n {{.NAMESPACE_KUBERAY}}
+      echo "[Expected output]: \"Complete\"" 

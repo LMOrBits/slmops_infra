@@ -1,0 +1,23 @@
+version: "3"
+
+tasks:
+  install:
+    desc: Install or upgrade MLflow server
+    cmds:
+    - helm upgrade --install mlflow-server ./manifests/mlflow --values ./manifests/mlflow.yml
+
+  port-forward:
+    desc: Port forward MLflow server to localhost:5000
+    cmds:
+    - kubectl port-forward svc/mlflow-server-tracking 5000:5000
+
+  status:
+    desc: Check MLflow deployment status
+    cmds:
+    - |
+      echo "\nMLflow Pods:"
+      kubectl get pods | grep mlflow
+      echo "\nMLflow Services:"
+      kubectl get svc | grep mlflow
+      echo "\nMLflow Ingress:"
+      kubectl get ingress | grep mlflow 

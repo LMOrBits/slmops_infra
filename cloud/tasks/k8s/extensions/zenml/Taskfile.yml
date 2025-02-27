@@ -1,0 +1,27 @@
+version: "3"
+
+tasks:
+  install:
+    desc: Install or upgrade ZenML server
+    cmds:
+    - |
+      helm upgrade --install zenml-server ./manifests/zenml \
+        --values ./manifests/zenml.yml \
+        --create-namespace \
+        --namespace {{.NAMESPACE_ZENML}}
+
+  port-forward:
+    desc: Port forward ZenML server to localhost:8080
+    cmds:
+    - kubectl port-forward -n {{.NAMESPACE_ZENML}} svc/zenml-server 8080:8080
+
+  status:
+    desc: Check ZenML deployment status
+    cmds:
+    - |
+      echo "\nZenML Pods:"
+      kubectl get pods | grep zenml
+      echo "\nZenML Services:"
+      kubectl get svc | grep zenml
+      echo "\nZenML Ingress:"
+      kubectl get ingress | grep zenml

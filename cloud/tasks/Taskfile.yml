@@ -1,0 +1,37 @@
+# Main Taskfile
+version: "3"
+
+includes:
+  iac: ./iac/Taskfile.yml
+  k8s: ./k8s/Taskfile.yml
+
+vars:
+  NAMESPACE_ZENML: zenml
+  NAMESPACE_KUBERAY: kuberay-operator
+  NAMESPACE_DEBUG: zenml
+
+tasks:
+  initiate-iac:
+    desc: Initiate IaC dev environment make sure you have .env with correct variables (based on the .env.example file and tfvars file)
+    cmds:
+    - task: iac:initiate-backend-storage
+    - task: iac:init-dev-environment
+
+  initiate-k8s:
+    desc: install all extensions and create all resources needed for LMOrbits
+    cmds:
+    - task: k8s:extensions:install-ingress
+    - task: k8s:extensions:install-zenml
+    - task: k8s:gcloud:gcloud-docker-auth
+    - task: k8s:gcloud:gcloud-docker-auth-zen
+    - task: k8s:gcloud:add-gcs-secret-lakefs
+    - task: k8s:extensions:install-mlflow
+    - task: k8s:extensions:install-lakefs
+
+  # Status Tasks
+  status:
+    desc: Check overall cluster status
+    cmds:
+    - task: k8s:extensions:mlflow:status
+    - task: k8s:extensions:zenml:status
+    - task: k8s:utils:status-ingress
