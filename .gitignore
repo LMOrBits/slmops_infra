@@ -19,9 +19,9 @@ htmlcov/
 **/.terraform/*
 *.tfstate
 *.tfstate.*
-*.tfvars
-!terraform/environments/dev/terraform.tfvars
-!terraform/init/terraform.tfvars
+# *.tfvars
+# !terraform/environments/dev/terraform.tfvars
+# !terraform/init/terraform.tfvars
 crash.log
 crash.*.log
 override.tf
