@@ -1,0 +1,4 @@
+version: "3"
+includes:
+  local: local/tasks/Taskfile.yml
+  cloud: cloud/tasks/Taskfile.yml
