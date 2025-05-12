@@ -1,11 +1,11 @@
-auth:
-  enablePostgresUser: true
-  postgresPassword: myPassword
-  username: postgres
-  password: myPassword
-  database: lakefs
-  replicationUsername: repl_user
-  replicationPassword: myPassword
-  # secretKeys:
-  #   adminPasswordKey: postgres-password
-  #   userPasswordKey: password
+# auth:
+#   enablePostgresUser: true
+#   postgresPassword: myPassword
+#   username: postgres
+#   password: myPassword
+#   database: lakefs
+#   replicationUsername: repl_user
+#   replicationPassword: myPassword
+# secretKeys:
+#   adminPasswordKey: postgres-password
+#   userPasswordKey: password

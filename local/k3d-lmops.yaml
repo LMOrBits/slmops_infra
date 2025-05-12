@@ -6,12 +6,12 @@ metadata:
 servers: 1 # 1 master node
 agents: 2 # 2 worker nodes
 
-kubeAPI: # same as `--api-port myhost.my.domain:6445` (where the name would resolve to 127.0.0.1)
-  host: "slmops.localhost" # important for the `server` setting in the kubeconfig
-  hostIP: "127.0.0.1" # where the Kubernetes API will be listening on
-  hostPort: "6445" # where the Kubernetes API listening port will be mapped to on your host system
+# kubeAPI: # same as `--api-port myhost.my.domain:6445` (where the name would resolve to 127.0.0.1)
+#   host: "slmops.localhost" # important for the `server` setting in the kubeconfig
+#   hostIP: "127.0.0.1" # where the Kubernetes API will be listening on
+#   hostPort: "6445" # where the Kubernetes API listening port will be mapped to on your host system
 
-subnet: "172.28.0.0/16" # same as `--subnet 172.28.0.0/16`
+# subnet: "172.28.0.0/16" # same as `--subnet 172.28.0.0/16`
 ports:
   - port: 80:80 # same as `--port '8080:80@loadbalancer'`
     nodeFilters:
@@ -24,11 +24,11 @@ ports:
 #     nodeFilters:
 #       - server:0
 #       - agent:*
-registries: # define how registries should be created or used
-  create: # creates a default registry to be used with the cluster; same as `--registry-create registry.localhost`
-    name: registry.localhost
-    host: "0.0.0.0"
-    hostPort: "5000"
+# registries: # define how registries should be created or used
+#   create: # creates a default registry to be used with the cluster; same as `--registry-create registry.localhost`
+#     name: registry.localhost
+#     host: "0.0.0.0"
+#     hostPort: "5000"
 options:
   k3d: # k3d runtime settings
     wait: true # wait for cluster to be usable before returining; same as `--wait` (default: true)

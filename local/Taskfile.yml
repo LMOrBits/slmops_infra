@@ -1,0 +1,7 @@
+version: "3"
+
+### Make sure you had the credentials for the GCS bucket in the gcs-credentials secret
+## by going in main repo and task cloud:
+# cloud:iac:init-dev-environment:
+includes:
+  local: ./tasks/Taskfile.yml

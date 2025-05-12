@@ -13,7 +13,8 @@ fullnameOverride: ""
 
 ingress:
   enabled: false
-  annotations: {}
+  annotations:
+    {}
     # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
   ingressClassName: ""
@@ -30,7 +31,6 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-
 
 podAnnotations: {}
 jobPodAnnotations:
@@ -111,7 +111,7 @@ fluffy:
   enabled: false
   image:
     repository: treeverse/fluffy
-    tag: '0.8.1'
+    tag: "0.8.1"
     pullPolicy: IfNotPresent
 
 # Start local postgres pod for quick start, not for production
