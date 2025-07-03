@@ -16,7 +16,9 @@ resource "google_project_iam_member" "super_admin_roles" {
     "roles/cloudscheduler.admin",    # Full control of Cloud Scheduler
     "roles/logging.admin",           # Full control of logging
     "roles/monitoring.admin",        # Full control of monitoring
-    "roles/artifactregistry.admin"   # Full control of artifact registry
+    "roles/artifactregistry.admin",  # Full control of artifact registry
+    "roles/storage.objectViewer",    # View access to storage objects
+    "roles/storage.objectCreator"    # Create access to storage objects
   ])
 
   project = var.project_id
@@ -33,6 +35,13 @@ resource "google_service_account" "storage_admin" {
   account_id   = "storage-admin-sa"
   display_name = "Storage Admin Service Account"
   project      = var.project_id
+}
+
+# Add project-level storage permissions for storage-admin
+resource "google_project_iam_member" "storage_admin_permissions" {
+  project = var.project_id
+  role    = "roles/storage.admin"
+  member  = "serviceAccount:${google_service_account.storage_admin.email}"
 }
 
 resource "google_service_account" "storage_user" {
