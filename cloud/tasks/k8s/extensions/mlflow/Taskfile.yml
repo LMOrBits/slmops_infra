@@ -1,23 +1,43 @@
 version: "3"
 
 tasks:
+  create-secret:
+    desc: Create the secret for the MLflow server
+    cmds:
+      - |
+        kubectl apply -f ./tasks/k8s/extensions/mlflow/secret.yml || true
   install:
     desc: Install or upgrade MLflow server
     cmds:
-    - helm upgrade --install mlflow-server ./manifests/mlflow --values ./manifests/mlflow.yml
+      - task: create-secret
+      - helm upgrade --install mlflow-server ./manifests/mlflow --values ./manifests/mlflow.yml || true
+
+  delete:
+    desc: Delete MLflow server
+    cmds:
+      - kubectl delete -f ./tasks/k8s/extensions/mlflow/secret.yml || true
+      - helm uninstall mlflow-server
+      - |
+        kubectl get pvc -n default -o json \
+          | jq -r '
+              .items[]
+              | select(.metadata.name // "" | contains("mlflow"))
+              | .metadata.name
+            ' \
+          | xargs -r -n1 kubectl delete pvc -n default
 
   port-forward:
     desc: Port forward MLflow server to localhost:5000
     cmds:
-    - kubectl port-forward svc/mlflow-server-tracking 5000:5000
+      - kubectl port-forward svc/mlflow-server-tracking 5000:5000
 
   status:
     desc: Check MLflow deployment status
     cmds:
-    - |
-      echo "\nMLflow Pods:"
-      kubectl get pods | grep mlflow
-      echo "\nMLflow Services:"
-      kubectl get svc | grep mlflow
-      echo "\nMLflow Ingress:"
-      kubectl get ingress | grep mlflow 
+      - |
+        echo "\nMLflow Pods:"
+        kubectl get pods | grep mlflow
+        echo "\nMLflow Services:"
+        kubectl get svc | grep mlflow
+        echo "\nMLflow Ingress:"
+        kubectl get ingress | grep mlflow

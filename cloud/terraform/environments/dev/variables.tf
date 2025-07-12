@@ -65,7 +65,7 @@ variable "env" {
 variable "enable_civo_cluster" {
   description = "Enable Civo cluster"
   type        = bool
-  default     = false 
+  default     = true
 }
 
 variable "civo_region" {
@@ -74,6 +74,8 @@ variable "civo_region" {
   default     = "fra1"
 }
 
-
-
-
+variable "civo_token" {
+  description = "The Civo token"
+  type        = string
+  sensitive   = true
+}

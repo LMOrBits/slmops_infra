@@ -5,5 +5,17 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-  "go-task-bin>=3.41.0",
+    "go-task-bin>=3.41.0",
+    "rich>=14.0.0",
 ]
+
+[project.scripts]
+watch = "watch:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]

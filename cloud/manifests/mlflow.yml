@@ -15,17 +15,24 @@ tracking:
     tls: true
   resources:
     limits:
-      memory: "6Gi"
-      cpu: "4"
+      memory: "1Gi"
+      cpu: "1"
     requests:
-      memory: "4Gi"
-      cpu: "2"
+      memory: "1Gi"
+      cpu: "1"
   extraEnvVars:
     - name: GUNICORN_CMD_ARGS
       value: "--timeout 600 --workers 4"
 minio:
   enabled: false
 
+postgresql:
+  enabled: true
+  auth:
+    username: mlflow
+    password: mlflow
+    database: bitnami_mlflow
+    existingSecret: mlflow-postgresql
 
 externalGCS:
   bucket: "slmops-dev-ml-artifacts"
@@ -34,4 +41,3 @@ externalGCS:
   existingSecret: "gcs-credentials"
   existingSecretKey: "credentials.json"
   serveArtifacts: true
-

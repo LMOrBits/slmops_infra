@@ -1,0 +1,12 @@
+version: "3"
+
+tasks:
+  install:
+    desc: Install LakeFS
+    cmds:
+      - helm upgrade --install lakefs ./manifests/lakefs --values ./manifests/lakefs.yaml || true
+
+  delete:
+    desc: Delete LakeFS
+    cmds:
+      - helm uninstall lakefs

@@ -1,54 +1,58 @@
 version: "3"
 
 vars:
-  SUPER_ADMIN_KEY: cloud/terraform/environments/dev/keys/super-admin-key.json
+  SUPER_ADMIN_KEY: terraform/environments/dev/keys/super-admin-key.json
 
 tasks:
+  debug:
+    desc: Debug GCloud tasks
+    cmds:
+      - ls
   docker-auth:
     desc: Create docker registry secret for default namespace
     cmds:
-    - |
-      kubectl create secret docker-registry artifact-registry-secret \
-        --docker-server=https://europe-north1-docker.pkg.dev \
-        --docker-username=_json_key \
-        --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
-        --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com
+      - |
+        kubectl create secret docker-registry artifact-registry-secret \
+          --docker-server=https://europe-north1-docker.pkg.dev \
+          --docker-username=_json_key \
+          --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
+          --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com || true
 
   docker-auth-zen:
     desc: Create docker registry secret for ZenML namespace
     cmds:
-    - |
-      kubectl create secret docker-registry artifact-registry-secret \
-        --docker-server=https://europe-north1-docker.pkg.dev \
-        --docker-username=_json_key \
-        --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
-        --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com \
-        --namespace {{.NAMESPACE_ZENML}}
+      - |
+        kubectl create secret docker-registry artifact-registry-secret \
+          --docker-server=https://europe-north1-docker.pkg.dev \
+          --docker-username=_json_key \
+          --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
+          --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com \
+          --namespace {{.NAMESPACE_ZENML}} || true
 
   add-gcs-secret-lakefs:
     desc: Create GCS credentials secret for LakeFS
     cmds:
-    - |
-      kubectl create secret generic gcs-credentials \
-        --from-file=credentials.json={{.SUPER_ADMIN_KEY}} 
+      - |
+        kubectl create secret generic gcs-credentials \
+          --from-file=credentials.json={{.SUPER_ADMIN_KEY}} || true
 
   gcloud-docker-auth:
     desc: Create docker registry secret for default namespace
     cmds:
-    - |
-      kubectl create secret docker-registry artifact-registry-secret \
-        --docker-server=https://europe-north1-docker.pkg.dev \
-        --docker-username=_json_key \
-        --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
-        --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com
+      - |
+        kubectl create secret docker-registry artifact-registry-secret \
+          --docker-server=https://europe-north1-docker.pkg.dev \
+          --docker-username=_json_key \
+          --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
+          --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com || true
 
   gcloud-docker-auth-zen:
     desc: Create docker registry secret for ZenML namespace
     cmds:
-    - |
-      kubectl create secret docker-registry artifact-registry-secret \
-        --docker-server=https://europe-north1-docker.pkg.dev \
-        --docker-username=_json_key \
-        --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
-        --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com \
-        --namespace {{.NAMESPACE_ZENML}}
+      - |
+        kubectl create secret docker-registry artifact-registry-secret \
+          --docker-server=https://europe-north1-docker.pkg.dev \
+          --docker-username=_json_key \
+          --docker-password="$(cat {{.SUPER_ADMIN_KEY}})" \
+          --docker-email=super-admin-dev@slmops-dev.iam.gserviceaccount.com \
+          --namespace {{.NAMESPACE_ZENML}} || true

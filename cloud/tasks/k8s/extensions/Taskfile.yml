@@ -5,3 +5,4 @@ includes:
   kuberay: ./kuberay/Taskfile.yml
   optik: ./optik/Taskfile.yml
   ingress: ./ingress/Taskfile.yml
+  lakefs: ./lakefs/Taskfile.yml

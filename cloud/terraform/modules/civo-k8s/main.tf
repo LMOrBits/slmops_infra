@@ -1,24 +1,8 @@
-terraform {
-  required_providers {
-    civo = {
-      source = "civo/civo"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "~> 2.23"
-    }
-    vault = {
-      source  = "hashicorp/vault"
-      version = "3.19.0"
-    }
-  }
-}
-
 locals {
-  cluster_config      = yamldecode(file(var.cluster_config))
-  kube_config_filename = "./kubeconfig"
-  cluster_name        = local.cluster_config.cluster_name
-  master_config       = local.cluster_config.environments[var.environment].master_config
+  cluster_config       = yamldecode(file(var.cluster_config))
+  kube_config_filename = "${path.root}/keys/kubeconfig"
+  cluster_name         = local.cluster_config.cluster_name
+  master_config        = local.cluster_config.environments[var.environment].master_config
 }
 
 resource "civo_network" "kubefirst" {
@@ -27,7 +11,7 @@ resource "civo_network" "kubefirst" {
 
 resource "civo_firewall" "kubefirst" {
   name                 = "firewall-${local.cluster_name}"
-  network_id          = civo_network.kubefirst.id
+  network_id           = civo_network.kubefirst.id
   create_default_rules = true
 }
 
@@ -43,9 +27,12 @@ resource "civo_kubernetes_cluster" "kubefirst" {
   }
 }
 
-resource "local_file" "kubefirst" {
-  content  = civo_kubernetes_cluster.kubefirst.kubeconfig
-  filename = "${path.module}/kubeconfig"
+resource "local_file" "kubeconfig" {
+  content              = civo_kubernetes_cluster.kubefirst.kubeconfig
+  filename             = local.kube_config_filename
+  file_permission      = "0600"
+  directory_permission = "0755"
+
   depends_on = [
     civo_kubernetes_cluster.kubefirst
   ]

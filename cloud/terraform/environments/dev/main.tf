@@ -1,8 +1,11 @@
 
 locals {
-  project_id = var.project_id
-  region     = var.region
-  env        = "dev"
+  project_id          = var.project_id
+  region              = var.region
+  env                 = "dev"
+  keys_path           = "${path.module}/keys"
+  cluster_config_path = "${path.module}/civo-cluster-config.yaml"
+  cluster_config      = yamldecode(file(local.cluster_config_path))
 }
 
 module "service_account" {
@@ -64,22 +67,21 @@ module "vpc" {
   project_id  = var.project_id
 }
 module "compute" {
-  count = var.enable_compute_build ? 1 : 0
+  count  = var.enable_compute_build ? 1 : 0
   source = "../../modules/compute"
 
   subnet_id        = module.vpc.subnet_id
   instances_config = var.instances_config
   project_id       = var.project_id
 }
-provider "civo" {
-  region = "fra1"
-}
+
+
+
+
 module "civo_cluster" {
-  count = var.enable_civo_cluster ? 1 : 0
-  source = "../../modules/civo-k8s"
- providers = {
-    civo = civo
-  }
-  cluster_config = "${path.module}/civo-cluster-config.yaml"
+  count          = var.enable_civo_cluster ? 1 : 0
+  source         = "../../modules/civo-k8s"
+  civo_region    = local.cluster_config.environments.dev.master_config.zone
+  cluster_config = local.cluster_config_path
   environment    = "dev"
 }

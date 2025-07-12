@@ -23,6 +23,11 @@ variable "cluster_config" {
   type        = string
 }
 
+variable "civo_region" {
+  description = "The Civo region"
+  type        = string
+}
+
 variable "environment" {
   description = "Environment name (dev, staging, prod)"
   type        = string

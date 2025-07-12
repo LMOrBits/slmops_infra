@@ -4,3 +4,22 @@ includes:
   gcloud: ./gcloud/Taskfile.yml
   extensions: ./extensions/Taskfile.yml
   utils: ./utils/Taskfile.yml
+
+tasks:
+  change-main-domain:
+    vars:
+      PREVIOUS_DOMAIN: '{{default "lmorbits.com" .PREVIOUS_DOMAIN}}'
+      NEW_DOMAIN: "{{.NEW_DOMAIN}}"
+    desc: Change main domain
+    cmds:
+      - |
+        kubectl get ingress --all-namespaces -o yaml \
+        | sed 's/{{.PREVIOUS_DOMAIN}}/{{.NEW_DOMAIN}}/g' \
+        | kubectl apply -f -
+
+  get-ingress-ip:
+    desc: Get ingress IP
+    cmds:
+      - |
+        kubectl get ingress lakefs \
+        -o jsonpath='{.status.loadBalancer.ingress[0].ip}{"\n"}'

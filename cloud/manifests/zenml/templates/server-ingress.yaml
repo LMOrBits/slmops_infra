@@ -7,7 +7,7 @@
   {{- end }}
 {{- end }}
 {{- if and $.Values.zenml.ingress.tls.enabled (eq .Values.zenml.ingress.className "nginx") }}
-  {{- $_ := set .Values.zenml.ingress.annotations "nginx.ingress.kubernetes.io/ssl-redirect" "true"}}
+  {{- $_ := set .Values.zenml.ingress.annotations "nginx.ingress.kubernetes.io/ssl-redirect" "false"}}
 {{- end }}
 
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}

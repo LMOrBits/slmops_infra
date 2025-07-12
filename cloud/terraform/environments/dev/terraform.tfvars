@@ -14,4 +14,4 @@ enable_compute_build     = false
 env = "dev"
 
 enable_civo_cluster = true
-civo_region = "fra1"
+civo_region         = "fra1"
